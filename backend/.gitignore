@@ -2,3 +2,4 @@
 venv
 schemes_database.json
 .DS_Store
+__pycache__
