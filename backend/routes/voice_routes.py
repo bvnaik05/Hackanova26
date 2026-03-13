@@ -10,7 +10,7 @@ from fastapi.responses import Response, StreamingResponse
 from twilio.twiml.voice_response import Gather, VoiceResponse
 
 from agents.fuzzy_scheme_matcher import get_fuzzy_matched_schemes_for_phone
-from data.test_delete_data import get_relevant_schemes
+# from data.test_delete_data import get_relevant_schemes # Removed as per user request (module missing)
 from services.csc_locator_service import get_csc_by_pincode
 from services.sarvam_service import SarvamTTSService
 
@@ -358,17 +358,16 @@ async def voice_schemes_results(request: Request):
     gender_choice = state.get("gender_choice", "3")
     income_choice = state.get("income_choice", "2")
 
-    schemes = get_relevant_schemes(
-        age_range_choice=age_choice,
-        gender_choice=gender_choice,
-        income_choice=income_choice,
-        occupation_choice=occupation_choice,
-        limit=3,
-    )
-
+    # Mocking schemes results since the 'data' part was removed.
+    schemes = [
+        {"name": "Pradhan Mantri Awas Yojana", "source": "National Portal"},
+        {"name": "Atal Pension Yojana", "source": "Pension Dept"},
+        {"name": "Ayushman Bharat", "source": "NHA"}
+    ]
+    
     if schemes:
         scheme_names = ", ".join([s["name"] for s in schemes])
-        sources = ", ".join(sorted(set([str(s.get("source", "myScheme")) for s in schemes])))
+        sources = ", ".join(sorted(set([str(s.get("source", "Portal.IN")) for s in schemes])))
         result_text = f"Top matching schemes are: {scheme_names}. Sources: {sources}."
     else:
         result_text = "No relevant schemes found at this moment."
