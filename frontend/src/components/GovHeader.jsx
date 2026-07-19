@@ -28,39 +28,40 @@ export default function GovHeader() {
       <GovTopBar />
 
       {/* Main navbar — brand left · nav center · actions right */}
-      <div className="bg-white/95 backdrop-blur border-b border-[var(--line)]">
-        <div className="wrap flex items-center justify-between gap-4 py-3">
+      <div className="bg-white/85 backdrop-blur-md border-b border-[var(--line)] shadow-sm transition-all">
+        <div className="wrap flex items-center justify-between gap-4 py-3.5">
           {/* Left: brand */}
-          <Link to="/" className="shrink-0">
+          <Link to="/" className="shrink-0 group hover:opacity-90 transition-opacity">
             <HaqqLogo size={40} />
           </Link>
 
           {/* Center: primary navigation (desktop) */}
-          <nav className="hidden md:flex items-center gap-7 scroll-x overflow-x-auto">
+          <nav className="hidden md:flex items-center gap-8 scroll-x overflow-x-auto">
             {navItems.map((n) => (
-              <Link key={n.label} to={n.to} className={`navlink !py-2 ${isActive(n.to) ? "active" : ""}`}>
+              <Link key={n.label} to={n.to} className={`navlink py-1.5 ${isActive(n.to) ? "active" : ""}`}>
                 {n.label}
               </Link>
             ))}
           </nav>
 
           {/* Right: flag + auth */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="hidden lg:block">
-              <IndianFlag width={40} />
+              <IndianFlag width={36} />
             </div>
+            <div className="w-px h-6 bg-[var(--line)] hidden sm:block mx-1" />
             {loggedIn ? (
-              <div className="hidden sm:flex items-center gap-2.5">
+              <div className="hidden sm:flex items-center gap-3">
                 <Link to="/dashboard" className="btn btn-outline btn-sm">
-                  <LayoutDashboard size={15} /> Dashboard
+                  <LayoutDashboard size={16} /> Dashboard
                 </Link>
-                <button onClick={logout} className="btn btn-primary btn-sm">
-                  <LogOut size={15} /> Logout
+                <button onClick={logout} className="btn btn-ghost btn-sm text-[var(--muted)] hover:text-[var(--err)]">
+                  <LogOut size={16} /> Logout
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="hidden sm:inline-flex btn btn-primary btn-sm">
-                <LogIn size={15} /> Citizen Login
+              <Link to="/login" className="hidden sm:inline-flex btn btn-primary btn-sm px-5">
+                <LogIn size={16} /> Citizen Login
               </Link>
             )}
             <button
@@ -68,7 +69,7 @@ export default function GovHeader() {
               onClick={() => setOpen((o) => !o)}
               aria-label="Toggle menu"
             >
-              {open ? <X size={20} /> : <Menu size={20} />}
+              {open ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
@@ -76,31 +77,31 @@ export default function GovHeader() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden bg-white border-b border-[var(--line)] shadow-[var(--shadow)]">
-          <div className="wrap py-2 flex flex-col">
+        <div className="md:hidden glass border-b border-[var(--line)] shadow-lg absolute w-full left-0">
+          <div className="wrap py-4 flex flex-col gap-1">
             {navItems.map((n) => (
               <Link
                 key={n.label} to={n.to} onClick={() => setOpen(false)}
-                className={`py-2.5 text-sm font-semibold border-b border-[var(--line)] last:border-0 ${
-                  isActive(n.to) ? "text-[var(--navy)]" : "text-[var(--body)]"
+                className={`py-3 px-4 rounded-lg text-sm font-semibold transition-colors ${
+                  isActive(n.to) ? "bg-[var(--surface-2)] text-[var(--navy)]" : "text-[var(--body)] hover:bg-[var(--surface-2)] hover:text-[var(--ink)]"
                 }`}
               >
                 {n.label}
               </Link>
             ))}
-            <div className="py-3 flex gap-2">
+            <div className="mt-4 pt-4 border-t border-[var(--line)] flex flex-col gap-3 px-2">
               {loggedIn ? (
                 <>
-                  <Link to="/dashboard" onClick={() => setOpen(false)} className="btn btn-outline btn-sm flex-1">
-                    <LayoutDashboard size={15} /> Dashboard
+                  <Link to="/dashboard" onClick={() => setOpen(false)} className="btn btn-outline btn-sm w-full">
+                    <LayoutDashboard size={16} /> Dashboard
                   </Link>
-                  <button onClick={() => { setOpen(false); logout(); }} className="btn btn-primary btn-sm flex-1">
-                    <LogOut size={15} /> Logout
+                  <button onClick={() => { setOpen(false); logout(); }} className="btn btn-ghost btn-sm w-full text-[var(--err)]">
+                    <LogOut size={16} /> Logout
                   </button>
                 </>
               ) : (
-                <Link to="/login" onClick={() => setOpen(false)} className="btn btn-primary btn-sm w-full">
-                  <LogIn size={15} /> Citizen Login
+                <Link to="/login" onClick={() => setOpen(false)} className="btn btn-primary btn-sm w-full py-2.5">
+                  <LogIn size={16} /> Citizen Login
                 </Link>
               )}
             </div>

@@ -60,106 +60,112 @@ export default function Login({ onLoginSuccess }) {
 
   const Select = ({ label, k, opts }) => (
     <label className="block">
-      <span className="label">{label}</span>
-      <select className="field mt-1.5" value={f[k]} onChange={set(k)}>
+      <span className="label text-[13px] font-bold text-[var(--ink)] uppercase tracking-wider mb-1.5">{label}</span>
+      <select className="field rounded-xl shadow-sm border-gray-200 focus:ring-4 focus:ring-blue-500/10 text-[14px]" value={f[k]} onChange={set(k)}>
         {opts.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
       </select>
     </label>
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg)]">
+    <div className="min-h-screen flex flex-col bg-[var(--bg)] selection:bg-blue-100">
       <GovHeader />
-      <main className="flex-1 wrap py-12 md:py-16 grid lg:grid-cols-2 gap-12 items-center">
+      
+      {/* Background decoration */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex justify-center">
+        <div className="w-[800px] h-[800px] bg-gradient-to-tr from-blue-50/50 to-orange-50/50 rounded-full blur-3xl opacity-60 translate-y-[-20%]"></div>
+      </div>
+
+      <main className="flex-1 wrap py-12 md:py-20 grid lg:grid-cols-2 gap-16 items-center relative z-10">
         {/* Left: reassurance */}
         <div className="hidden lg:block fade-up">
-          <span className="eyebrow">Citizen portal</span>
-          <h1 className="text-3xl md:text-4xl font-extrabold mt-2">
+          <span className="eyebrow bg-blue-50 px-3 py-1 rounded-full text-blue-600">Citizen portal</span>
+          <h1 className="font-heading text-4xl md:text-5xl font-extrabold mt-6 leading-tight">
             {mode === "login" ? "Sign in to your account" : "Create your Haqq account"}
           </h1>
-          <p className="mt-3 text-[var(--muted)] max-w-md leading-relaxed">
+          <p className="mt-6 text-[17px] text-[var(--muted)] max-w-md leading-relaxed font-medium">
             Use your mobile number and PIN to see the welfare schemes you're entitled to
             and apply with your documents — securely and privately.
           </p>
-          <ul className="mt-8 space-y-4 max-w-md">
+          <ul className="mt-10 space-y-5 max-w-md">
             {[
               "Your PIN is encrypted; your phone number is never stored in the clear.",
               "Documents are fetched only with your explicit consent (DPDP Act, 2023).",
               "No smartphone? The same service works over a phone call.",
             ].map((t) => (
-              <li key={t} className="flex gap-3 text-sm text-[var(--body)]">
-                <ShieldCheck className="text-[var(--green)] shrink-0 mt-0.5" size={18} /> {t}
+              <li key={t} className="flex gap-4 text-[15px] font-medium text-[var(--body)] bg-white/50 p-4 rounded-xl border border-white/60 shadow-sm">
+                <ShieldCheck className="text-green-600 shrink-0 mt-0.5" size={20} /> {t}
               </li>
             ))}
           </ul>
 
-          <div className="mt-8 card p-4 flex items-center gap-3 max-w-md bg-[var(--saffron-50)] border-[#f7dcc4]">
-            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[var(--saffron)] shrink-0">
-              <PhoneCall size={18} />
+          <div className="mt-10 card p-5 flex items-center gap-4 max-w-md bg-gradient-to-r from-orange-50 to-white border-orange-100 rounded-2xl shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
+              <PhoneCall size={20} />
             </div>
-            <div className="text-sm">
-              <div className="font-semibold text-[var(--ink)]">Prefer to call?</div>
-              <div className="text-[var(--muted)]">Dial our toll-free IVR to find schemes by voice.</div>
+            <div>
+              <div className="font-heading font-bold text-[var(--ink)] text-[16px]">Prefer to call?</div>
+              <div className="text-[14px] text-[var(--muted)] font-medium mt-0.5">Dial our toll-free IVR to find schemes by voice.</div>
             </div>
           </div>
         </div>
 
         {/* Right: form */}
-        <div className="w-full max-w-md justify-self-center lg:justify-self-end fade-up">
-          <div className="card shadow-[var(--shadow-lg)] p-6 md:p-8">
-            <div className="flex items-center gap-2 text-[var(--muted)] text-xs font-semibold mb-5">
-              <Languages size={14} /> Available in 22 Indian languages
+        <div className="w-full max-w-md justify-self-center lg:justify-self-end fade-up" style={{ animationDelay: '100ms' }}>
+          <div className="glass-card rounded-[24px] p-6 md:p-10 shadow-xl shadow-blue-900/5">
+            <div className="flex items-center justify-center gap-2 text-[var(--navy)] text-[13px] font-bold mb-8 bg-blue-50/50 py-2 rounded-xl">
+              <Languages size={16} className="text-blue-600" /> Available in 22 Indian languages
             </div>
 
-            <div className="flex rounded-[var(--radius-sm)] bg-[var(--surface-2)] p-1 mb-6 border border-[var(--line)]">
+            <div className="flex rounded-xl bg-gray-100/80 p-1.5 mb-8 border border-white/50 shadow-inner">
               {["login", "register"].map((m) => (
                 <button key={m} onClick={() => setMode(m)}
-                  className={`flex-1 py-2.5 rounded-[8px] text-sm font-semibold capitalize transition-all ${
-                    mode === m ? "bg-white text-[var(--navy)] shadow-sm" : "text-[var(--muted)]"
+                  className={`flex-1 py-3 rounded-lg text-[14px] font-bold capitalize transition-all duration-300 ${
+                    mode === m ? "bg-white text-[var(--navy)] shadow-sm scale-[1.02]" : "text-[var(--muted)] hover:text-[var(--ink)]"
                   }`}>
                   {m === "login" ? "Login" : "Register"}
                 </button>
               ))}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               <label className="block">
-                <span className="label">Mobile number</span>
-                <div className="relative mt-1.5">
-                  <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
-                  <input className="field pl-9" inputMode="numeric" placeholder="10-digit mobile number"
+                <span className="label text-[13px] font-bold text-[var(--ink)] uppercase tracking-wider mb-1.5">Mobile number</span>
+                <div className="relative">
+                  <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
+                  <input className="field pl-12 py-3.5 text-[15px] rounded-xl shadow-sm border-gray-200 focus:ring-4 focus:ring-blue-500/10 transition-all" inputMode="numeric" placeholder="10-digit mobile number"
                     value={f.mobile_number} onChange={set("mobile_number")} />
                 </div>
               </label>
               <label className="block">
-                <span className="label">PIN</span>
-                <div className="relative mt-1.5">
-                  <KeyRound size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
-                  <input className="field pl-9" type="password" inputMode="numeric" placeholder="4–6 digit PIN"
+                <span className="label text-[13px] font-bold text-[var(--ink)] uppercase tracking-wider mb-1.5">PIN</span>
+                <div className="relative">
+                  <KeyRound size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
+                  <input className="field pl-12 py-3.5 text-[15px] rounded-xl shadow-sm border-gray-200 focus:ring-4 focus:ring-blue-500/10 transition-all" type="password" inputMode="numeric" placeholder="4–6 digit PIN"
                     value={f.pin} onChange={set("pin")} />
                 </div>
               </label>
 
               {mode === "register" && (
-                <div className="grid grid-cols-2 gap-3 pt-1">
+                <div className="grid grid-cols-2 gap-4 pt-2">
                   <Select label="Age" k="age_slab" opts={AGE} />
                   <Select label="Gender" k="gender" opts={GENDER} />
                   <Select label="Income band" k="income_slab" opts={INCOME} />
                   <Select label="Occupation" k="occupation" opts={OCC} />
                   <label className="block col-span-2">
-                    <span className="label">State</span>
-                    <select className="field mt-1.5" value={f.state} onChange={set("state")}>
+                    <span className="label text-[13px] font-bold text-[var(--ink)] uppercase tracking-wider mb-1.5">State</span>
+                    <select className="field rounded-xl shadow-sm border-gray-200 focus:ring-4 focus:ring-blue-500/10 text-[14px]" value={f.state} onChange={set("state")}>
                       {STATES.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
                     </select>
-                    <span className="text-xs text-[var(--muted)] mt-1 block">
+                    <span className="text-xs font-medium text-[var(--muted)] mt-1.5 block">
                       Unlocks State-specific welfare schemes.
                     </span>
                   </label>
                   <label className="block col-span-2">
-                    <span className="label">Exact annual income (₹, optional)</span>
-                    <input className="field mt-1.5" inputMode="numeric" placeholder="e.g. 120000"
+                    <span className="label text-[13px] font-bold text-[var(--ink)] uppercase tracking-wider mb-1.5">Exact annual income (₹, optional)</span>
+                    <input className="field py-3 rounded-xl shadow-sm border-gray-200 focus:ring-4 focus:ring-blue-500/10 text-[14px]" inputMode="numeric" placeholder="e.g. 120000"
                       value={f.annual_income} onChange={set("annual_income")} />
-                    <span className="text-xs text-[var(--muted)] mt-1 block">
+                    <span className="text-xs font-medium text-[var(--muted)] mt-1.5 block">
                       Giving an exact figure makes your eligibility results more precise.
                     </span>
                   </label>
@@ -169,12 +175,12 @@ export default function Login({ onLoginSuccess }) {
               <button
                 onClick={mode === "login" ? doLogin : doRegister}
                 disabled={busy}
-                className="btn btn-primary w-full btn-lg mt-1">
-                {busy && <Loader2 className="animate-spin" size={18} />}
-                {mode === "login" ? "Login" : "Register & continue"}
+                className="btn btn-primary w-full py-3.5 text-[16px] mt-4 shadow-blue-900/10 hover:shadow-blue-900/20">
+                {busy && <Loader2 className="animate-spin" size={20} />}
+                {mode === "login" ? "Login to your account" : "Register & continue"}
               </button>
 
-              <p className="text-xs text-[var(--muted)] text-center pt-1">
+              <p className="text-[12px] font-medium text-[var(--muted)] text-center pt-3 px-4 leading-relaxed">
                 By continuing you agree to Haqq processing your data with consent under the DPDP Act, 2023.
               </p>
             </div>

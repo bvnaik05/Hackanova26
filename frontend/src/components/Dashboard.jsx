@@ -31,29 +31,29 @@ function ApplicationRow({ app, onGrievance }) {
   const grievance = app.status === "grievance_raised";
   const idx = grievance ? 0 : Math.max(0, STATUS_STEPS.indexOf(app.status));
   return (
-    <div className={`border rounded-[var(--radius-sm)] p-3 ${grievance ? "border-[var(--warn)]/50 bg-[var(--warn-bg)]" : "border-[var(--line)]"}`}>
+    <div className={`border rounded-[16px] p-4 transition-all hover:shadow-md ${grievance ? "border-[var(--warn)]/30 bg-orange-50" : "border-[var(--line)] bg-white hover:border-[var(--line-strong)]"}`}>
       <div className="flex items-center justify-between gap-2">
-        <span className="font-semibold text-sm text-[var(--ink)] truncate">{app.scheme_name}</span>
-        <span className="badge badge-info shrink-0">{app.ticket_id}</span>
+        <span className="font-semibold text-[15px] text-[var(--ink)] truncate">{app.scheme_name}</span>
+        <span className="badge badge-info shrink-0 px-2.5 py-1">{app.ticket_id}</span>
       </div>
-      <div className="mt-2.5 flex items-center gap-1">
+      <div className="mt-4 flex items-center gap-1.5">
         {STATUS_STEPS.map((s, i) => (
-          <div key={s} className="flex items-center gap-1 flex-1 last:flex-none">
-            <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${i <= idx ? "bg-[var(--green)]" : "bg-[var(--line-strong)]"}`} />
+          <div key={s} className="flex items-center gap-1.5 flex-1 last:flex-none">
+            <div className={`w-2.5 h-2.5 rounded-full shrink-0 transition-colors ${i <= idx ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]" : "bg-[var(--line-strong)]"}`} />
             {i < STATUS_STEPS.length - 1 && (
-              <div className={`h-0.5 flex-1 ${i < idx ? "bg-[var(--green)]" : "bg-[var(--line-strong)]"}`} />
+              <div className={`h-0.5 flex-1 rounded-full transition-colors ${i < idx ? "bg-green-500" : "bg-[var(--line-strong)]"}`} />
             )}
           </div>
         ))}
       </div>
-      <div className="mt-1.5 flex items-center justify-between">
-        <span className={`text-xs flex items-center gap-1 ${grievance ? "text-[var(--warn)] font-semibold" : "text-[var(--muted)]"}`}>
-          <Clock size={11} /> {STATUS_LABEL[app.status] || app.status}
+      <div className="mt-3 flex items-center justify-between">
+        <span className={`text-[13px] font-medium flex items-center gap-1.5 ${grievance ? "text-[var(--warn)]" : "text-[var(--muted)]"}`}>
+          <Clock size={14} /> {STATUS_LABEL[app.status] || app.status}
         </span>
         {!grievance && (
           <button onClick={() => onGrievance(app)}
-            className="text-xs font-semibold text-[var(--blue)] flex items-center gap-1">
-            <MessageSquareWarning size={12} /> Raise grievance
+            className="text-[13px] font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1.5 bg-blue-50 px-2 py-1 rounded-md transition-colors">
+            <MessageSquareWarning size={14} /> Raise grievance
           </button>
         )}
       </div>
@@ -73,33 +73,33 @@ function SchemeCard({ s, verified, onApply, onExplain, t }) {
   const dl = useMemo(() => schemeDeadline(s), [s]);
   const tt = (k, fallback) => (t ? t(k) : fallback);
   return (
-    <div className="card card-hover p-5 flex flex-col">
+    <div className="card card-hover p-5 md:p-6 flex flex-col rounded-[20px] bg-white border-[var(--line)] border">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="font-bold text-[var(--ink)] leading-snug">{s.name}</h3>
-          <div className="mt-1 text-xs text-[var(--muted)]">{s.category}</div>
+          <h3 className="font-heading text-lg font-bold text-[var(--ink)] leading-snug">{s.name}</h3>
+          <div className="mt-1 text-sm font-medium text-[var(--muted)]">{s.category}</div>
         </div>
-        <span className={`badge ${cls} shrink-0`}>{label}</span>
+        <span className={`badge ${cls} shrink-0 px-3 py-1.5 shadow-sm`}>{label}</span>
       </div>
 
-      <div className="mt-2">
-        <span className={`badge ${dl.closingSoon ? "badge-err" : "badge-neutral"}`}>
-          <Clock size={11} /> {dl.hasDeadline ? (dl.closingSoon ? `${tt("badge.closingSoon", "Closing soon")} · ${dl.date}` : dl.label) : tt("badge.openAllYear", "Open all year")}
+      <div className="mt-3">
+        <span className={`badge ${dl.closingSoon ? "badge-err" : "badge-neutral bg-[var(--surface-2)]"}`}>
+          <Clock size={12} /> {dl.hasDeadline ? (dl.closingSoon ? `${tt("badge.closingSoon", "Closing soon")} · ${dl.date}` : dl.label) : tt("badge.openAllYear", "Open all year")}
         </span>
       </div>
 
-      <p className="mt-3 text-sm text-[var(--muted)] line-clamp-2">{s.benefit_amount}</p>
+      <p className="mt-4 text-[15px] font-medium text-[var(--body)] line-clamp-2">{s.benefit_amount}</p>
 
-      <div className="mt-4">
-        <div className="flex items-center justify-between text-xs text-[var(--muted)] mb-1">
+      <div className="mt-5 p-4 rounded-xl bg-[var(--surface-2)] border border-[var(--line)]">
+        <div className="flex items-center justify-between text-xs font-semibold text-[var(--muted)] mb-2 uppercase tracking-wider">
           <span>Match score</span>
-          <span className="font-semibold text-[var(--navy)]">{match}%</span>
+          <span className="text-[var(--navy)]">{match}%</span>
         </div>
-        <div className="h-1.5 rounded-full bg-[var(--surface-2)] overflow-hidden">
-          <div className="h-full rounded-full bg-[var(--navy)]" style={{ width: `${match}%` }} />
+        <div className="h-2 rounded-full bg-[var(--line-strong)]/50 overflow-hidden">
+          <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600" style={{ width: `${match}%` }} />
         </div>
         {typeof s.semantic_score === "number" && (
-          <div className="text-xs text-[var(--muted)] mt-1.5">
+          <div className="text-[11px] font-medium text-[var(--muted)] mt-2">
             Relevance {Math.round(s.semantic_score * 100)}%
           </div>
         )}
@@ -107,34 +107,36 @@ function SchemeCard({ s, verified, onApply, onExplain, t }) {
 
       {s.reasons?.length > 0 && (
         <button onClick={() => setOpen(!open)}
-          className="mt-3 text-xs font-semibold text-[var(--blue)] flex items-center gap-1 self-start">
-          Why do I qualify? {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          className="mt-4 text-[13px] font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 self-start transition-colors">
+          Why do I qualify? {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
       )}
       {open && (
-        <ul className="mt-2 space-y-1.5 rounded-[var(--radius-sm)] bg-[var(--surface-2)] p-3">
+        <ul className="mt-3 space-y-2 rounded-xl bg-blue-50/50 border border-blue-100 p-3.5">
           {s.reasons.map((r, i) => (
-            <li key={i} className="text-xs flex items-center gap-2">
-              {r.outcome === "pass" ? <CheckCircle2 size={13} className="text-[var(--green)] shrink-0" />
-                : r.outcome === "fail" ? <CircleAlert size={13} className="text-[var(--err)] shrink-0" />
-                : <CircleAlert size={13} className="text-[var(--warn)] shrink-0" />}
-              <span className="text-[var(--body)]">{r.field} {r.operator} {String(r.value)}</span>
+            <li key={i} className="text-sm flex items-start gap-2.5">
+              {r.outcome === "pass" ? <CheckCircle2 size={16} className="text-green-500 shrink-0 mt-0.5" />
+                : r.outcome === "fail" ? <CircleAlert size={16} className="text-red-500 shrink-0 mt-0.5" />
+                : <CircleAlert size={16} className="text-orange-500 shrink-0 mt-0.5" />}
+              <span className="text-[var(--body)] font-medium leading-snug">{r.field} {r.operator} {String(r.value)}</span>
             </li>
           ))}
         </ul>
       )}
 
-      <button onClick={() => onApply(s)} disabled={s.eligibility === "not_eligible"}
-        className="btn btn-primary w-full mt-4 btn-sm">
-        <Bot size={15} /> {tt("card.apply", "Auto-fill & Apply")}
-      </button>
-      <div className="flex gap-2 mt-2">
-        <button onClick={() => onExplain(s)} className="btn btn-outline btn-sm flex-1">
-          <BookOpen size={14} /> {tt("card.explain", "Explain simply")}
+      <div className="mt-auto pt-6">
+        <button onClick={() => onApply(s)} disabled={s.eligibility === "not_eligible"}
+          className="btn btn-primary w-full py-2.5 text-[15px] shadow-blue-900/10">
+          <Bot size={18} /> {tt("card.apply", "Auto-fill & Apply")}
         </button>
-        <button onClick={() => shareSchemes([s])} className="btn btn-outline btn-sm !px-3" title={tt("card.share", "Share")}>
-          <Share2 size={14} />
-        </button>
+        <div className="flex gap-2 mt-3">
+          <button onClick={() => onExplain(s)} className="btn btn-outline flex-1 py-2 text-[14px]">
+            <BookOpen size={16} /> {tt("card.explain", "Explain simply")}
+          </button>
+          <button onClick={() => shareSchemes([s])} className="btn btn-outline px-4 text-[var(--muted)] hover:text-[var(--navy)]" title={tt("card.share", "Share")}>
+            <Share2 size={16} />
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -147,46 +149,49 @@ function RightsSummary({ schemes, profile, digilocker, onConnect }) {
   const gaps = profileGaps(profile, digilocker);
 
   return (
-    <div className="card p-5 md:p-6 bg-gradient-to-br from-[var(--blue-50)] to-white border-[var(--blue-100)]">
-      <div className="flex items-center gap-2 text-[var(--navy)] font-bold">
-        <BadgeIndianRupee size={18} /> Your rights, in numbers
+    <div className="glass-card p-6 md:p-8 rounded-[24px] bg-gradient-to-br from-blue-50/90 to-white/90 border border-blue-100/60 shadow-lg shadow-blue-900/5">
+      <div className="flex items-center gap-2.5 text-[var(--navy)] font-bold text-lg font-heading">
+        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+          <BadgeIndianRupee size={18} className="text-blue-600" />
+        </div>
+        Your rights, in numbers
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-4">
+      <div className="mt-6 grid grid-cols-2 gap-6">
         <div>
-          <div className="text-2xl md:text-3xl font-extrabold text-[var(--ink)] tabular-nums">{formatINR(total)}</div>
-          <div className="text-xs text-[var(--muted)] mt-0.5 flex items-center gap-1">
-            <TrendingUp size={12} className="text-[var(--green)]" /> potential benefits you may claim
+          <div className="font-heading text-3xl md:text-4xl font-extrabold text-[var(--ink)] tabular-nums tracking-tight">{formatINR(total)}</div>
+          <div className="text-[13px] font-medium text-[var(--muted)] mt-1 flex items-center gap-1.5">
+            <TrendingUp size={14} className="text-green-500" /> potential benefits
           </div>
         </div>
         <div>
-          <div className="text-2xl md:text-3xl font-extrabold text-[var(--green)] tabular-nums">{count}</div>
-          <div className="text-xs text-[var(--muted)] mt-0.5">
-            schemes matched to you{ready > 0 ? ` · ${ready} ready` : ""}
+          <div className="font-heading text-3xl md:text-4xl font-extrabold text-green-600 tabular-nums tracking-tight">{count}</div>
+          <div className="text-[13px] font-medium text-[var(--muted)] mt-1">
+            schemes matched{ready > 0 ? ` · ${ready} ready` : ""}
           </div>
         </div>
       </div>
 
-      <div className="mt-4">
-        <div className="flex items-center justify-between text-xs text-[var(--muted)] mb-1">
+      <div className="mt-8 p-4 rounded-xl bg-white/60 border border-white backdrop-blur-sm shadow-sm">
+        <div className="flex items-center justify-between text-xs font-bold text-[var(--muted)] mb-2.5 uppercase tracking-wider">
           <span>Profile completeness</span>
-          <span className="font-semibold text-[var(--navy)]">{pct}%</span>
+          <span className="text-[var(--navy)]">{pct}%</span>
         </div>
-        <div className="h-1.5 rounded-full bg-white border border-[var(--line)] overflow-hidden">
-          <div className="h-full rounded-full bg-[var(--saffron)]" style={{ width: `${pct}%` }} />
+        <div className="h-2.5 rounded-full bg-[var(--line)] overflow-hidden">
+          <div className="h-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500 shadow-sm" style={{ width: `${pct}%` }} />
         </div>
       </div>
 
       {gaps.length > 0 && (
-        <div className="mt-4">
-          <div className="text-xs font-semibold text-[var(--ink)] mb-1.5">Unlock more of your rights:</div>
-          <ul className="space-y-1.5">
+        <div className="mt-6 border-t border-[var(--line)] pt-6">
+          <div className="text-[13px] font-bold text-[var(--ink)] mb-3 uppercase tracking-wider">Unlock more rights:</div>
+          <ul className="space-y-2.5">
             {gaps.slice(0, 3).map((g) => (
-              <li key={g.key} className="text-xs flex items-start gap-2">
-                <CircleAlert size={13} className="text-[var(--warn)] mt-0.5 shrink-0" />
-                <span className="text-[var(--body)]">
+              <li key={g.key} className="text-sm flex items-start gap-3 bg-white/40 p-3 rounded-lg border border-white/60">
+                <CircleAlert size={16} className="text-orange-500 mt-0.5 shrink-0" />
+                <span className="text-[var(--body)] font-medium">
                   <button
                     onClick={g.key === "digilocker" ? onConnect : undefined}
-                    className={g.key === "digilocker" ? "font-semibold text-[var(--blue)] underline" : "font-semibold"}>
+                    className={g.key === "digilocker" ? "font-bold text-blue-600 hover:text-blue-700 underline underline-offset-2" : "font-bold text-[var(--ink)]"}>
                     {g.label}
                   </button>
                   <span className="text-[var(--muted)]"> — {g.why}</span>
@@ -308,99 +313,102 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg)]">
       <GovHeader />
-      <main className="flex-1 wrap py-8">
+      <main className="flex-1 wrap py-10">
         {/* Greeting + profile strip */}
-        <div className="card p-5 md:p-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="glass-card p-6 md:p-8 flex flex-wrap items-center justify-between gap-6 rounded-[24px]">
           <div>
-            <h1 className="text-xl md:text-2xl font-extrabold flex items-center gap-2">
+            <h1 className="font-heading text-2xl md:text-3xl font-extrabold flex items-center gap-3">
               {t("dash.greeting")}{profile?.name ? `, ${profile.name}` : ""} 🙏
-              {verified && <span className="badge badge-ok"><ScanFace size={12} /> Verified</span>}
+              {verified && <span className="badge badge-ok shadow-sm px-3 py-1 bg-green-50"><ScanFace size={14} className="mr-1" /> Verified</span>}
             </h1>
-            <p className="text-sm text-[var(--muted)] mt-0.5">{t("dash.subtitle")}</p>
+            <p className="text-[15px] font-medium text-[var(--muted)] mt-2">{t("dash.subtitle")}</p>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button onClick={() => setShowRelative(true)} className="btn btn-outline btn-sm">
-              <Users size={14} /> {t("dash.checkRelative")}
+          <div className="flex flex-wrap items-center gap-3">
+            <button onClick={() => setShowRelative(true)} className="btn btn-outline bg-white hover:bg-gray-50">
+              <Users size={16} /> {t("dash.checkRelative")}
             </button>
             <LanguageSwitcher />
           </div>
         </div>
 
         {profile && (
-          <div className="flex flex-wrap gap-2 mt-3">
-            <span className="badge badge-neutral">Age {profile.age_slab || "—"}</span>
-            <span className="badge badge-neutral">{profile.gender || "—"}</span>
-            <span className="badge badge-neutral">
+          <div className="flex flex-wrap gap-2 mt-5 px-2">
+            <span className="badge bg-white border border-[var(--line)] text-[var(--body)] px-3 py-1.5 shadow-sm">Age {profile.age_slab || "—"}</span>
+            <span className="badge bg-white border border-[var(--line)] text-[var(--body)] px-3 py-1.5 shadow-sm">{profile.gender || "—"}</span>
+            <span className="badge bg-white border border-[var(--line)] text-[var(--body)] px-3 py-1.5 shadow-sm">
               {profile.annual_income ? `₹${profile.annual_income}/yr` : (profile.income_slab || "—")}
             </span>
-            <span className="badge badge-neutral">{profile.occupation || "—"}</span>
-            {profile.state && <span className="badge badge-neutral">{profile.state}</span>}
+            <span className="badge bg-white border border-[var(--line)] text-[var(--body)] px-3 py-1.5 shadow-sm">{profile.occupation || "—"}</span>
+            {profile.state && <span className="badge bg-white border border-[var(--line)] text-[var(--body)] px-3 py-1.5 shadow-sm">{profile.state}</span>}
           </div>
         )}
 
         {/* Life-event journeys */}
         {mode === "eligible" && (
-          <div className="mt-6">
+          <div className="mt-8">
             <LifeEvents onPick={(query) => runSearch(query)} />
           </div>
         )}
 
         {/* Semantic search */}
-        <div className="card p-5 md:p-6 mt-6">
-          <label className="text-sm font-bold flex items-center gap-2 text-[var(--navy)]">
-            <Sparkles size={16} /> {t("dash.describe")}
+        <div className="card p-6 md:p-8 mt-8 rounded-[24px]">
+          <label className="text-[15px] font-bold flex items-center gap-2.5 text-[var(--navy)] mb-4">
+            <Sparkles size={18} className="text-orange-500" /> {t("dash.describe")}
           </label>
-          <div className="mt-3 flex flex-col sm:flex-row gap-2">
-            <div className="relative flex-1">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1 group">
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-blue-500 transition-colors" />
               <input
-                className="field pl-9"
+                className="field pl-11 py-3.5 text-[15px] shadow-sm rounded-xl border-gray-200 focus:ring-4 focus:ring-blue-500/10 transition-all"
                 placeholder="e.g. money for my daughter's education, help to learn a skill…"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && runSearch()}
               />
             </div>
-            <button onClick={() => runSearch()} disabled={searching} className="btn btn-primary">
-              {searching ? <Loader2 className="animate-spin" size={16} /> : <Search size={16} />} {t("dash.search")}
+            <button onClick={() => runSearch()} disabled={searching} className="btn btn-primary py-3.5 px-8 text-[15px] rounded-xl shadow-blue-900/10">
+              {searching ? <Loader2 className="animate-spin" size={18} /> : <Search size={18} />} {t("dash.search")}
             </button>
           </div>
           {mode === "search" && (
-            <button onClick={showEligible} className="mt-3 text-xs font-semibold text-[var(--blue)]">
+            <button onClick={showEligible} className="mt-4 text-[13px] font-bold text-blue-600 hover:text-blue-700 transition-colors inline-flex items-center gap-1">
               ← Back to all my eligible schemes
             </button>
           )}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid lg:grid-cols-3 gap-8 mt-8">
           {/* Schemes */}
           <section className="lg:col-span-2">
             {applications.length > 0 && mode === "eligible" && (
-              <div className="card p-5 md:p-6 mb-6">
-                <div className="flex items-center gap-2 font-bold text-[var(--ink)] mb-3">
-                  <ClipboardList size={17} className="text-[var(--navy)]" /> {t("dash.myApplications")}
-                  <span className="badge badge-neutral ml-auto">{applications.length}</span>
+              <div className="card p-6 md:p-8 mb-8 rounded-[24px] bg-gradient-to-b from-white to-gray-50/50">
+                <div className="flex items-center gap-2.5 font-heading text-lg font-bold text-[var(--ink)] mb-5">
+                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
+                    <ClipboardList size={18} className="text-blue-600" />
+                  </div>
+                  {t("dash.myApplications")}
+                  <span className="badge bg-[var(--navy)] text-white ml-auto px-3 py-1 shadow-sm">{applications.length}</span>
                 </div>
-                <div className="grid sm:grid-cols-2 gap-3">
+                <div className="grid sm:grid-cols-2 gap-4">
                   {applications.map((a) => <ApplicationRow key={a.ticket_id} app={a} onGrievance={raiseGrievance} />)}
                 </div>
               </div>
             )}
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold text-[var(--ink)] flex items-center gap-2">
-                <LayoutGrid size={17} className="text-[var(--navy)]" />
+            <div className="flex items-center justify-between mb-6 px-2">
+              <h2 className="font-heading text-xl md:text-2xl font-bold text-[var(--ink)] flex items-center gap-2.5">
+                <LayoutGrid size={20} className="text-[var(--navy)]" />
                 {mode === "search" ? `Results for “${q}”` : t("dash.eligible")}
               </h2>
-              <span className="badge badge-neutral">{schemes.length} found</span>
+              <span className="badge bg-white border border-[var(--line)] shadow-sm px-3 py-1 font-semibold">{schemes.length} found</span>
             </div>
             {loading ? (
-              <div className="card p-12 text-center text-[var(--muted)]">
-                <Loader2 className="animate-spin mx-auto" />
+              <div className="card p-16 text-center text-[var(--muted)] rounded-[24px]">
+                <Loader2 className="animate-spin mx-auto w-8 h-8 text-blue-500" />
               </div>
             ) : schemes.length === 0 ? (
-              <div className="card p-12 text-center text-[var(--muted)]">No schemes to show yet.</div>
+              <div className="card p-16 text-center text-[var(--muted)] font-medium rounded-[24px]">No schemes to show yet.</div>
             ) : (
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-6">
                 {schemes.map((s) => (
                   <SchemeCard key={s.scheme_id} s={s} verified={verified} onApply={applyToScheme}
                     onExplain={setExplainScheme} t={t} />
@@ -410,40 +418,46 @@ export default function Dashboard() {
           </section>
 
           {/* Sidebar */}
-          <aside className="space-y-6">
+          <aside className="space-y-8">
             {mode === "eligible" && (
               <RightsSummary schemes={schemes} profile={profile} digilocker={digilocker} onConnect={connectDigiLocker} />
             )}
 
-            <div className="card p-5 md:p-6">
-              <div className="flex items-center gap-2 font-bold text-[var(--navy)]">
-                <FolderDown size={18} /> Your documents
+            <div className="card p-6 md:p-8 rounded-[24px]">
+              <div className="flex items-center gap-2.5 font-heading text-lg font-bold text-[var(--navy)]">
+                <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
+                  <FolderDown size={18} className="text-blue-600" />
+                </div>
+                Your documents
               </div>
-              <p className="text-sm text-[var(--muted)] mt-2 leading-relaxed">
+              <p className="text-[14px] text-[var(--muted)] font-medium mt-3 leading-relaxed">
                 Connect DigiLocker to auto-fetch your Aadhaar, PAN and certificates. A quick face check
                 protects your consent.
               </p>
               {docs.length > 0 ? (
                 <>
-                  <ul className="mt-4 space-y-2">
+                  <ul className="mt-5 space-y-3">
                     {docs.map((d) => (
                       <li key={d.uri}
-                        className="flex items-center gap-2 text-sm border border-[var(--line)] bg-[var(--surface-2)] rounded-[var(--radius-sm)] px-3 py-2">
-                        <FileCheck2 size={15} className="text-[var(--green)]" />
-                        <span className="font-medium text-[var(--ink)]">{d.name}</span>
+                        className="flex items-center gap-3 text-sm border border-[var(--line)] bg-[var(--surface-2)] rounded-xl px-4 py-3 shadow-sm">
+                        <FileCheck2 size={18} className="text-green-500" />
+                        <span className="font-semibold text-[var(--ink)]">{d.name}</span>
                       </li>
                     ))}
                   </ul>
                   {digilocker?.name && (
-                    <p className="mt-3 text-xs text-[var(--muted)]">
-                      Identity: <span className="font-semibold text-[var(--ink)]">{digilocker.name}</span>
-                      {digilocker.masked_aadhaar ? ` · Aadhaar ${digilocker.masked_aadhaar}` : ""}
-                    </p>
+                    <div className="mt-5 p-3.5 rounded-xl bg-gray-50 border border-gray-100">
+                      <p className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-1">Identity</p>
+                      <p className="text-[14px] font-bold text-[var(--ink)]">
+                        {digilocker.name}
+                        {digilocker.masked_aadhaar && <span className="text-[var(--muted)] font-medium ml-2">· Aadhaar {digilocker.masked_aadhaar}</span>}
+                      </p>
+                    </div>
                   )}
                 </>
               ) : (
-                <button onClick={connectDigiLocker} disabled={connecting} className="btn btn-saffron w-full mt-4">
-                  {connecting ? <Loader2 className="animate-spin" size={16} /> : <ScanFace size={16} />}
+                <button onClick={connectDigiLocker} disabled={connecting} className="btn btn-saffron w-full mt-5 py-3 shadow-orange-500/20 hover:shadow-orange-500/40">
+                  {connecting ? <Loader2 className="animate-spin" size={18} /> : <ScanFace size={18} />}
                   Verify &amp; Connect DigiLocker
                 </button>
               )}
@@ -451,11 +465,11 @@ export default function Dashboard() {
 
             <HelpCentreFinder />
 
-            <div className="card p-5 md:p-6 bg-[var(--blue-50)] border-[var(--blue-100)]">
-              <div className="flex items-center gap-2 font-bold text-[var(--navy)]">
-                <ShieldCheck size={18} /> Your privacy
+            <div className="card p-6 md:p-8 bg-gradient-to-br from-blue-50/50 to-white border border-blue-100 rounded-[24px]">
+              <div className="flex items-center gap-2.5 font-heading text-lg font-bold text-[var(--navy)]">
+                <ShieldCheck size={18} className="text-blue-600" /> Your privacy
               </div>
-              <p className="text-sm text-[var(--body)] mt-2 leading-relaxed">
+              <p className="text-[14px] text-[var(--body)] font-medium mt-3 leading-relaxed">
                 The face check runs on your device and no image is stored. Documents are fetched only with
                 your consent and used solely to check eligibility and pre-fill applications, under the DPDP Act, 2023.
               </p>
