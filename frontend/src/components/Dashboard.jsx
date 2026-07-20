@@ -157,28 +157,40 @@ function RightsSummary({ schemes, profile, digilocker, onConnect }) {
         </div>
         Your rights, in numbers
       </div>
-      <div className="mt-6 grid grid-cols-2 gap-6">
-        <div>
-          <div className="font-heading text-3xl md:text-4xl font-extrabold text-[var(--ink)] tabular-nums tracking-tight">{formatINR(total)}</div>
+      <div className="mt-6 flex flex-col gap-5">
+        <div className="min-w-0">
+          <div className="font-heading text-[clamp(1.5rem,7vw,2.25rem)] leading-tight font-extrabold text-[var(--ink)] tabular-nums tracking-tight break-words">
+            {formatINR(total)}
+          </div>
           <div className="text-[13px] font-medium text-[var(--muted)] mt-1 flex items-center gap-1.5">
-            <TrendingUp size={14} className="text-green-500" /> potential benefits
+            <TrendingUp size={14} className="text-green-500 shrink-0" /> potential benefits
           </div>
         </div>
-        <div>
-          <div className="font-heading text-3xl md:text-4xl font-extrabold text-green-600 tabular-nums tracking-tight">{count}</div>
-          <div className="text-[13px] font-medium text-[var(--muted)] mt-1">
-            schemes matched{ready > 0 ? ` · ${ready} ready` : ""}
+
+        <div className="h-px bg-[var(--line)]" aria-hidden="true" />
+
+        <div className="min-w-0 flex items-baseline gap-2.5 flex-wrap">
+          <div className="font-heading text-2xl font-extrabold text-green-600 tabular-nums tracking-tight shrink-0">{count}</div>
+          <div className="text-[13px] font-medium text-[var(--muted)] leading-snug">
+            schemes matched
+            {ready > 0 && <span className="block text-green-600 font-semibold">{ready} ready to apply</span>}
           </div>
         </div>
       </div>
 
       <div className="mt-8 p-4 rounded-xl bg-white/60 border border-white backdrop-blur-sm shadow-sm">
-        <div className="flex items-center justify-between text-xs font-bold text-[var(--muted)] mb-2.5 uppercase tracking-wider">
-          <span>Profile completeness</span>
-          <span className="text-[var(--navy)]">{pct}%</span>
+        <div className="flex items-baseline justify-between gap-2 mb-2.5">
+          <span className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider truncate">Profile completeness</span>
+          <span className="font-heading text-sm font-extrabold text-[var(--navy)] tabular-nums shrink-0">{pct}%</span>
         </div>
-        <div className="h-2.5 rounded-full bg-[var(--line)] overflow-hidden">
-          <div className="h-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500 shadow-sm" style={{ width: `${pct}%` }} />
+        <div
+          className="h-2.5 rounded-full bg-[var(--line)] overflow-hidden"
+          role="progressbar"
+          aria-valuenow={pct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Profile completeness">
+          <div className="h-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500 shadow-sm transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
         </div>
       </div>
 
